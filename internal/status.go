@@ -11,8 +11,12 @@ func Status(statusPath string) string {
 	var (
 		defaultRemaining = "--:--"
 		endTime          = utils.DetermineEndTime(statusPath)
-		state            = utils.DetermineStatusState(statusPath)
 		isExpired        = time.Now().After(endTime)
+	)
+
+	var (
+		state     = utils.DetermineStatusState(statusPath)
+		indicator = utils.DetermineStateIndicator(state)
 	)
 
 	if isExpired {
@@ -29,7 +33,7 @@ func Status(statusPath string) string {
 
 	remainingString := fmt.Sprintf(
 		"%s%02d:%02d",
-		state,
+		indicator,
 		minutes,
 		seconds,
 	)

@@ -10,16 +10,28 @@ import (
 
 type StatusState string
 
-// Indicator for status command.
 const (
-	StateFocus StatusState = "F"
-	StateBreak StatusState = "B"
+	StateFocus StatusState = "focus"
+	StateBreak StatusState = "break"
 )
 
 type Status struct {
 	// TODO: add pause, notification.
 	State   StatusState `json:"state"`
 	EndTime time.Time   `json:"end_time"`
+}
+
+func DetermineStateIndicator(state StatusState) string {
+	indicator := "undefined"
+
+	switch state {
+	case StateFocus:
+		indicator = "F"
+	case StateBreak:
+		indicator = "B"
+	}
+
+	return indicator
 }
 
 func WriteStatusFile(path string, data []byte) {
