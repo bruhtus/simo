@@ -7,11 +7,18 @@ import (
 	"github.com/bruhtus/simo/utils"
 )
 
-func Focus(statusPath string, duration time.Duration) {
+func OnGoing(
+	statusPath string,
+	duration time.Duration,
+	state utils.StatusState,
+) {
+	// TODO:
+	// abort when we're already in on going state,
+	// not yet expired state.
 	endTime := time.Now().Add(duration)
 
 	status := utils.Status{
-		State:   utils.StateFocus,
+		State:   state,
 		EndTime: endTime,
 	}
 

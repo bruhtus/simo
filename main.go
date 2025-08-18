@@ -10,14 +10,27 @@ import (
 )
 
 var (
-	t          string
-	statusPath = "/tmp/simo.json"
+	focusTime, breakTime string
+	statusPath           = "/tmp/simo.json"
 
 	focusCmd = flag.NewFlagSet("focus", flag.ContinueOnError)
+	breakCmd = flag.NewFlagSet("break", flag.ContinueOnError)
 )
 
 func init() {
-	focusCmd.StringVar(&t, "t", "50m", "Pomodoro duration time")
+	focusCmd.StringVar(
+		&focusTime,
+		"t",
+		"50m",
+		"Pomodoro duration time",
+	)
+
+	breakCmd.StringVar(
+		&breakTime,
+		"t",
+		"10m",
+		"Pomodoro duration time",
+	)
 }
 
 func main() {
@@ -32,10 +45,15 @@ func main() {
 
 	case "focus":
 		focusCmd.Parse(os.Args[2:])
-		duration := utils.ParseDuration(t)
-		scmd.Focus(statusPath, duration)
+		duration := utils.ParseDuration(focusTime)
+		scmd.OnGoing(statusPath, duration, utils.StateFocus)
 
-	// TODO: add break subcommand.
+	case "break":
+		breakCmd.Parse(os.Args[2:])
+		duration := utils.ParseDuration(breakTime)
+		scmd.OnGoing(statusPath, duration, utils.StateBreak)
+
+	// TODO: add reset subcommand to reset current state.
 
 	default:
 		utils.HelpUsage()
