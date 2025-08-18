@@ -2,6 +2,7 @@ package scmd
 
 import (
 	"encoding/json"
+	"fmt"
 	"time"
 
 	"github.com/bruhtus/simo/utils"
@@ -12,9 +13,19 @@ func OnGoing(
 	duration time.Duration,
 	state utils.StatusState,
 ) {
-	// TODO:
-	// abort when we're already in on going state,
-	// not yet expired state.
+	var (
+		existingEndTime = utils.DetermineEndTime(statusPath)
+		isExpired       = time.Now().After(existingEndTime)
+	)
+
+	if !isExpired {
+		fmt.Printf(
+			"Session %s still on going, use reset subcommand to start a new session\n",
+			state,
+		)
+		return
+	}
+
 	endTime := time.Now().Add(duration)
 
 	status := utils.Status{
