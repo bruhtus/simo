@@ -25,3 +25,11 @@ func CheckError(err error) {
 		os.Exit(1)
 	}
 }
+
+func HelpUsage() {
+	fmt.Fprintf(
+		os.Stdout,
+		"Usage: simo status | focus [-t 10m] \n",
+	)
+	os.Exit(0)
+}
