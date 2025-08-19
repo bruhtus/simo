@@ -46,18 +46,29 @@ func WriteStatusFile(path string, data []byte) {
 	CheckError(err)
 }
 
-func DetermineEndTime(statusPath string) time.Time {
-	endTime := time.Now()
-	data, err := os.ReadFile(statusPath)
+func ReadStatusFile(statusPath string) *Status {
+	var (
+		status    = new(Status)
+		data, err = os.ReadFile(statusPath)
+	)
 
 	if !errors.Is(err, os.ErrNotExist) {
 		CheckError(err)
 
-		status := new(Status)
-
 		err = json.Unmarshal(data, status)
 		CheckError(err)
+	}
 
+	return status
+}
+
+func DetermineEndTime(statusPath string) time.Time {
+	var (
+		endTime = time.Now()
+		status  = ReadStatusFile(statusPath)
+	)
+
+	if status != nil {
 		endTime = status.EndTime
 	}
 
@@ -65,17 +76,12 @@ func DetermineEndTime(statusPath string) time.Time {
 }
 
 func DetermineStatusState(statusPath string) StatusState {
-	var state StatusState
-	data, err := os.ReadFile(statusPath)
+	var (
+		state  StatusState
+		status = ReadStatusFile(statusPath)
+	)
 
-	if !errors.Is(err, os.ErrNotExist) {
-		CheckError(err)
-
-		status := new(Status)
-
-		err = json.Unmarshal(data, status)
-		CheckError(err)
-
+	if status != nil {
 		state = status.State
 	}
 
