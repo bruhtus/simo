@@ -15,6 +15,7 @@ func OnGoing(
 	state utils.StatusState,
 ) {
 	var (
+		currentState    = utils.DetermineStatusState(statusPath)
 		existingEndTime = utils.DetermineEndTime(statusPath)
 		isExpired       = time.Now().After(existingEndTime)
 	)
@@ -22,7 +23,7 @@ func OnGoing(
 	if !isExpired {
 		fmt.Printf(
 			"Session %s still on going, use reset subcommand to start a new session\n",
-			state,
+			currentState,
 		)
 		return
 	}
