@@ -24,13 +24,7 @@ func Status(statusPath string) string {
 		return defaultRemaining
 	}
 
-	remaining := time.
-		Until(endTime).
-		Round(time.Second)
-
-	minutes := remaining / time.Minute
-	remaining -= minutes * time.Minute
-	seconds := remaining / time.Second
+	minutes, seconds := utils.ParseRemainingDuration(endTime)
 
 	remainingString := fmt.Sprintf(
 		"%s%02d:%02d",
