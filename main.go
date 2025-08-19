@@ -53,7 +53,9 @@ func main() {
 		duration := utils.ParseDuration(breakTime)
 		scmd.OnGoing(statusPath, duration, utils.StateBreak)
 
-	// TODO: add reset subcommand to reset current state.
+	case "reset":
+		err := scmd.Reset(statusPath)
+		utils.CheckError(err)
 
 	default:
 		utils.HelpUsage()
