@@ -57,6 +57,9 @@ func main() {
 		err := scmd.Reset(statusPath)
 		utils.CheckError(err)
 
+	case "pause":
+		scmd.Pause(statusPath)
+
 	default:
 		utils.HelpUsage()
 	}

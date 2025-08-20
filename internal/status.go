@@ -16,9 +16,27 @@ func Status(statusPath string) string {
 	)
 
 	var (
-		state     = utils.DetermineStatusState(statusPath)
-		indicator = utils.DetermineStateIndicator(state)
+		state      = utils.DetermineStatusState(statusPath)
+		indicator  = utils.DetermineStateIndicator(state)
+		pausePoint = utils.DeterminePausePoint(statusPath)
 	)
+
+	if pausePoint != nil {
+		remainingDuration := utils.ParseDuration(*pausePoint)
+
+		minutes := remainingDuration / time.Minute
+		remainingDuration -= minutes * time.Minute
+		seconds := remainingDuration / time.Second
+
+		remainingString := fmt.Sprintf(
+			"P%s%02d:%02d",
+			indicator,
+			minutes,
+			seconds,
+		)
+
+		return remainingString
+	}
 
 	if isExpired {
 		return defaultRemaining

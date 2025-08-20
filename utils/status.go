@@ -16,9 +16,11 @@ const (
 )
 
 type Status struct {
-	// TODO: add pause, notification.
-	State   StatusState `json:"state"`
-	EndTime time.Time   `json:"end_time"`
+	// TODO: add notification.
+	State StatusState `json:"state"`
+	// Duration left where we hit pause.
+	PausePoint *string   `json:"pause_point"`
+	EndTime    time.Time `json:"end_time"`
 }
 
 func DetermineStateIndicator(state StatusState) string {
@@ -86,4 +88,17 @@ func DetermineStatusState(statusPath string) StatusState {
 	}
 
 	return state
+}
+
+func DeterminePausePoint(statusPath string) *string {
+	var (
+		pausePoint *string
+		status     = ReadStatusFile(statusPath)
+	)
+
+	if status != nil {
+		pausePoint = status.PausePoint
+	}
+
+	return pausePoint
 }

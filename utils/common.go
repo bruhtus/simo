@@ -29,7 +29,7 @@ func CheckError(err error) {
 func HelpUsage() {
 	fmt.Fprintf(
 		os.Stdout,
-		"Usage: simo status | focus [-t 50m] | break [-t 10m] | reset\n",
+		"Usage: simo status | focus [-t 50m] | break [-t 10m] | reset | pause\n",
 	)
 	os.Exit(0)
 }
