@@ -16,8 +16,9 @@ const (
 )
 
 type Status struct {
-	// TODO: add notification.
-	State StatusState `json:"state"`
+	State    StatusState `json:"state"`
+	IsNotify bool        `json:"is_notify"`
+
 	// Duration left where we hit pause.
 	PausePoint *string   `json:"pause_point"`
 	EndTime    time.Time `json:"end_time"`

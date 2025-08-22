@@ -13,8 +13,12 @@ func OnGoing(
 	statusPath string,
 	duration time.Duration,
 	state utils.StatusState,
+	isUseNotify bool,
+	isNotifyCmdExist bool,
 ) {
 	var (
+		isNotify = false
+
 		currentState    = utils.DetermineStatusState(statusPath)
 		existingEndTime = utils.DetermineEndTime(statusPath)
 		isExpired       = time.Now().After(existingEndTime)
@@ -28,11 +32,16 @@ func OnGoing(
 		return
 	}
 
+	if isUseNotify && isNotifyCmdExist {
+		isNotify = true
+	}
+
 	endTime := time.Now().Add(duration)
 
 	status := utils.Status{
-		State:   state,
-		EndTime: endTime,
+		State:    state,
+		IsNotify: isNotify,
+		EndTime:  endTime,
 	}
 
 	statusJSON, err := json.Marshal(status)

@@ -8,7 +8,10 @@ import (
 )
 
 // TODO: add test case.
-func Status(statusPath string) string {
+func Status(
+	statusPath string,
+	notifyCmd string,
+) string {
 	var (
 		defaultRemaining = "--:--"
 		endTime          = utils.DetermineEndTime(statusPath)
@@ -39,6 +42,16 @@ func Status(statusPath string) string {
 	}
 
 	if isExpired {
+		statusFile := utils.ReadStatusFile(statusPath)
+
+		if statusFile != nil {
+			if statusFile.IsNotify {
+				utils.SendNotify(notifyCmd, state)
+			}
+
+			Reset(statusPath)
+		}
+
 		return defaultRemaining
 	}
 
