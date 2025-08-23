@@ -1,6 +1,7 @@
 package scmd
 
 import (
+	"encoding/json"
 	"fmt"
 	"time"
 
@@ -44,12 +45,14 @@ func Status(
 	if isExpired {
 		statusFile := utils.ReadStatusFile(statusPath)
 
-		if statusFile != nil {
-			if statusFile.IsNotify {
-				utils.SendNotify(notifyCmd, state)
-			}
+		if statusFile.IsNotify {
+			utils.SendNotify(notifyCmd, state)
+			statusFile.IsNotify = false
 
-			Reset(statusPath)
+			statusJSON, err := json.Marshal(statusFile)
+			utils.CheckError(err)
+
+			utils.WriteStatusFile(statusPath, statusJSON)
 		}
 
 		return defaultRemaining
