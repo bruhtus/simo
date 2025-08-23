@@ -3,6 +3,26 @@
 Simo is a simple pomodoro timer CLI that can be used in status bar,
 such as `i3status`.
 
+## Installation
+
+To install the this CLI, we can do:
+```sh
+go install github.com/bruhtus/simo@latest
+```
+
+Or if we want to use specific version, we can do:
+```sh
+go install github.com/bruhtus/simo@v1.0.0-rc1
+```
+
+If using `go install` does not work or we want to change the source code, we
+can clone the repo and use `go build` like this:
+```sh
+git clone https://github.com/bruhtus/simo.git
+cd simo
+go build
+```
+
 ## Usage
 
 The available subcommands are:
