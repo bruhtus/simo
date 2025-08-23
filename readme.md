@@ -15,6 +15,12 @@ Or if we want to use specific version, we can do:
 go install github.com/bruhtus/simo@v1.0.0-rc1
 ```
 
+Or if we want to use specific commit, let's say we want to
+install version on commit `550ac4e`, we can do:
+```sh
+go install github.com/bruhtus/simo@550ac4e
+```
+
 If using `go install` does not work or we want to change the source code, we
 can clone the repo and use `go build` like this:
 ```sh
