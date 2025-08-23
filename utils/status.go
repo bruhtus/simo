@@ -71,7 +71,7 @@ func DetermineEndTime(statusPath string) time.Time {
 		status  = ReadStatusFile(statusPath)
 	)
 
-	if status != nil {
+	if status.State != "" {
 		endTime = status.EndTime
 	}
 
@@ -84,7 +84,7 @@ func DetermineStatusState(statusPath string) StatusState {
 		status = ReadStatusFile(statusPath)
 	)
 
-	if status != nil {
+	if status.State != "" {
 		state = status.State
 	}
 
@@ -97,7 +97,7 @@ func DeterminePausePoint(statusPath string) *string {
 		status     = ReadStatusFile(statusPath)
 	)
 
-	if status != nil {
+	if status.State != "" {
 		pausePoint = status.PausePoint
 	}
 
