@@ -12,20 +12,18 @@ import (
 // FIXME: should not be paused when remaining duration is 0 seconds.
 func Pause(statusPath string) {
 	var (
-		status = utils.ReadStatusFile(statusPath)
-
-		existingEndTime = utils.DetermineEndTime(statusPath)
-		isExpired       = time.Now().After(existingEndTime)
+		status    = utils.ReadStatusFile(statusPath)
+		isExpired = time.Now().After(status.EndTime)
 
 		minutes, seconds = utils.ParseRemainingDuration(
-			existingEndTime,
+			status.EndTime,
 		)
 		newPausePoint = fmt.Sprintf("%dm%ds", minutes, seconds)
 	)
 
 	if isExpired {
 		if status.PausePoint != nil {
-			status.EndTime = existingEndTime
+			status.PausePoint = nil
 
 			statusJSON, err := json.Marshal(status)
 			utils.CheckError(err)

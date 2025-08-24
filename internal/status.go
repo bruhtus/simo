@@ -15,18 +15,15 @@ func Status(
 ) string {
 	var (
 		defaultRemaining = "--:--"
-		endTime          = utils.DetermineEndTime(statusPath)
-		isExpired        = time.Now().After(endTime)
+		status           = utils.ReadStatusFile(statusPath)
+		isExpired        = time.Now().After(status.EndTime)
+		indicator        = utils.DetermineStateIndicator(status.State)
 	)
 
-	var (
-		state      = utils.DetermineStatusState(statusPath)
-		indicator  = utils.DetermineStateIndicator(state)
-		pausePoint = utils.DeterminePausePoint(statusPath)
-	)
-
-	if pausePoint != nil {
-		remainingDuration := utils.ParseDuration(*pausePoint)
+	if status.PausePoint != nil {
+		remainingDuration := utils.ParseDuration(
+			*status.PausePoint,
+		)
 
 		minutes := remainingDuration / time.Minute
 		remainingDuration -= minutes * time.Minute
@@ -46,7 +43,7 @@ func Status(
 		statusFile := utils.ReadStatusFile(statusPath)
 
 		if statusFile.IsNotify {
-			utils.SendNotify(notifyCmd, state)
+			utils.SendNotify(notifyCmd, status.State)
 			statusFile.IsNotify = false
 
 			statusJSON, err := json.Marshal(statusFile)
@@ -58,7 +55,9 @@ func Status(
 		return defaultRemaining
 	}
 
-	minutes, seconds := utils.ParseRemainingDuration(endTime)
+	minutes, seconds := utils.ParseRemainingDuration(
+		status.EndTime,
+	)
 
 	remainingString := fmt.Sprintf(
 		"%s%02d:%02d",

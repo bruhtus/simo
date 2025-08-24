@@ -17,17 +17,15 @@ func OnGoing(
 	isNotifyCmdExist bool,
 ) {
 	var (
-		isNotify = false
-
-		currentState    = utils.DetermineStatusState(statusPath)
-		existingEndTime = utils.DetermineEndTime(statusPath)
-		isExpired       = time.Now().After(existingEndTime)
+		isNotify  = false
+		status    = utils.ReadStatusFile(statusPath)
+		isExpired = time.Now().After(status.EndTime)
 	)
 
 	if !isExpired {
 		fmt.Printf(
 			"Session %s still on going, use reset subcommand to start a new session\n",
-			currentState,
+			status.State,
 		)
 		return
 	}
@@ -38,11 +36,9 @@ func OnGoing(
 
 	endTime := time.Now().Add(duration)
 
-	status := utils.Status{
-		State:    state,
-		IsNotify: isNotify,
-		EndTime:  endTime,
-	}
+	status.State = state
+	status.IsNotify = isNotify
+	status.EndTime = endTime
 
 	statusJSON, err := json.Marshal(status)
 	utils.CheckError(err)
