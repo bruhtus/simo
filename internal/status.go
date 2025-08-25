@@ -16,7 +16,7 @@ func Status(
 	var (
 		defaultRemaining = "--:--"
 		status           = utils.ReadStatusFile(statusPath)
-		isExpired        = time.Now().After(status.EndTime)
+		isExpired        = utils.DetermineIsExpired(status.EndTime)
 		indicator        = utils.DetermineStateIndicator(status.State)
 	)
 

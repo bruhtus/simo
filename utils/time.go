@@ -24,3 +24,20 @@ func ParseRemainingDuration(
 
 	return minutes, seconds
 }
+
+func DetermineIsExpired(endTime time.Time) bool {
+	var (
+		isExpired = false
+
+		remainingDuration = time.Until(endTime)
+		remainingSeconds  = remainingDuration.
+					Round(time.Second).
+					Seconds()
+	)
+
+	if remainingSeconds <= 0 {
+		isExpired = true
+	}
+
+	return isExpired
+}

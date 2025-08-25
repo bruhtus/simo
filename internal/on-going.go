@@ -19,7 +19,7 @@ func OnGoing(
 	var (
 		isNotify  = false
 		status    = utils.ReadStatusFile(statusPath)
-		isExpired = time.Now().After(status.EndTime)
+		isExpired = utils.DetermineIsExpired(status.EndTime)
 	)
 
 	if !isExpired {

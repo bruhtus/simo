@@ -9,11 +9,10 @@ import (
 )
 
 // TODO: add test case.
-// FIXME: should not be paused when remaining duration is 0 seconds.
 func Pause(statusPath string) {
 	var (
 		status    = utils.ReadStatusFile(statusPath)
-		isExpired = time.Now().After(status.EndTime)
+		isExpired = utils.DetermineIsExpired(status.EndTime)
 
 		minutes, seconds = utils.ParseRemainingDuration(
 			status.EndTime,
