@@ -1,6 +1,7 @@
 package utils_test
 
 import (
+	"fmt"
 	"testing"
 	"time"
 
@@ -31,6 +32,42 @@ func TestIsExpired(t *testing.T) {
 				if output != tt.output {
 					t.Errorf(
 						"got %v, want %v",
+						output, tt.output,
+					)
+				}
+			},
+		)
+	}
+}
+
+func TestGetDurationMinutesAndSeconds(t *testing.T) {
+	durationCases := []struct {
+		duration string
+		output   string
+	}{
+		{"2h15m20s", "135:20"},
+		{"69m42s", "69:42"},
+		{"60m69s", "61:09"},
+	}
+
+	for _, tt := range durationCases {
+		t.Run(
+			tt.duration,
+			func(t *testing.T) {
+				parsedDuration, err := time.ParseDuration(tt.duration)
+				if err != nil {
+					t.Fatalf("Error parsing duration: %v", err)
+				}
+
+				minutes, seconds := utils.GetDurationMinutesAndSeconds(
+					parsedDuration,
+				)
+
+				output := fmt.Sprintf("%02d:%02d", minutes, seconds)
+
+				if output != tt.output {
+					t.Errorf(
+						"got %s, want %s",
 						output, tt.output,
 					)
 				}

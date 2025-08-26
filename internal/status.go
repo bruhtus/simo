@@ -3,7 +3,6 @@ package scmd
 import (
 	"encoding/json"
 	"fmt"
-	"time"
 
 	"github.com/bruhtus/simo/utils"
 )
@@ -25,9 +24,9 @@ func Status(
 			*status.PausePoint,
 		)
 
-		minutes := remainingDuration / time.Minute
-		remainingDuration -= minutes * time.Minute
-		seconds := remainingDuration / time.Second
+		minutes, seconds := utils.GetDurationMinutesAndSeconds(
+			remainingDuration,
+		)
 
 		remainingString := fmt.Sprintf(
 			"P%s%02d:%02d",

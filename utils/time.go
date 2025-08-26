@@ -11,6 +11,16 @@ func ParseDuration(duration string) time.Duration {
 	return parsedDuration
 }
 
+func GetDurationMinutesAndSeconds(
+	remaining time.Duration,
+) (time.Duration, time.Duration) {
+	minutes := remaining / time.Minute
+	remaining -= minutes * time.Minute
+	seconds := remaining / time.Second
+
+	return minutes, seconds
+}
+
 func ParseRemainingDuration(
 	endTime time.Time,
 ) (time.Duration, time.Duration) {
@@ -18,9 +28,7 @@ func ParseRemainingDuration(
 		Until(endTime).
 		Round(time.Second)
 
-	minutes := remaining / time.Minute
-	remaining -= minutes * time.Minute
-	seconds := remaining / time.Second
+	minutes, seconds := GetDurationMinutesAndSeconds(remaining)
 
 	return minutes, seconds
 }
