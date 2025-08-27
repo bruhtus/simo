@@ -8,7 +8,6 @@ import (
 	"github.com/bruhtus/simo/utils"
 )
 
-// TODO: add test case.
 func Pause(statusPath string) {
 	var (
 		status    = utils.ReadStatusFile(statusPath)
