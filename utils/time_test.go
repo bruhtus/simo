@@ -31,7 +31,7 @@ func TestIsExpired(t *testing.T) {
 				output := utils.DetermineIsExpired(tt.endTime)
 				if output != tt.output {
 					t.Errorf(
-						"got %t, want %t",
+						"Got %t, want %t",
 						output, tt.output,
 					)
 				}
@@ -67,7 +67,7 @@ func TestGetDurationMinutesAndSeconds(t *testing.T) {
 
 				if output != tt.output {
 					t.Errorf(
-						"got %s, want %s",
+						"Got %s, want %s",
 						output, tt.output,
 					)
 				}
@@ -100,7 +100,7 @@ func TestRemainingDuration(t *testing.T) {
 
 				if output != tt.output {
 					t.Errorf(
-						"got %s, want %s",
+						"Got %s, want %s",
 						output, tt.output,
 					)
 				}
