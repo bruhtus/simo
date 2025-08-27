@@ -65,3 +65,4 @@ simo break -t 5m -n
 - https://stackoverflow.com/a/38551362 (golang runtime.Caller() example)
 - https://stackoverflow.com/a/67905164 (golang FlagSet example)
 - https://stackoverflow.com/a/23551970 (when to use pointer or values in function)
+- https://stackoverflow.com/a/27775558 (explanation about value or pointer receiver in function type)
