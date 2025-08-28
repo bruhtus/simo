@@ -9,7 +9,8 @@ import (
 )
 
 func TestPause(t *testing.T) {
-	file := utils.TestSetupTempFile(t)
+	dirPath := t.TempDir()
+	file := utils.TestSetupTempFile(t, dirPath)
 
 	remainingDurationCases := []struct {
 		duration                time.Duration

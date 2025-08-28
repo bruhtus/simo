@@ -8,12 +8,11 @@ import (
 
 func TestSetupTempFile(
 	t *testing.T,
+	dirPath string,
 ) *os.File {
 	t.Helper()
 
-	dir := t.TempDir()
-	file, err := os.CreateTemp(dir, "simo-*.json")
-
+	file, err := os.CreateTemp(dirPath, "simo-*.json")
 	if err != nil {
 		t.Fatalf(
 			"Failed to create temporary file: %v",
