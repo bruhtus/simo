@@ -12,12 +12,23 @@ func TestPause(t *testing.T) {
 	file := utils.TestSetupTempFile(t)
 
 	remainingDurationCases := []struct {
-		duration time.Duration
-		output   string
+		duration                time.Duration
+		remainingDurationOutput string
+		isNotifyInput           bool
+		isNotifyOutput          bool
 	}{
-		{time.Duration(1 * time.Second), "0m1s"},
-		{time.Duration(1 * time.Minute), "1m0s"},
-		{time.Duration(1 * time.Hour), "60m0s"},
+		{
+			time.Duration(1 * time.Second), "0m1s",
+			true, true,
+		},
+		{
+			time.Duration(1 * time.Minute), "1m0s",
+			false, false,
+		},
+		{
+			time.Duration(1 * time.Hour), "60m0s",
+			true, true,
+		},
 	}
 
 	for _, tt := range remainingDurationCases {
@@ -26,7 +37,7 @@ func TestPause(t *testing.T) {
 			func(t *testing.T) {
 				status := utils.Status{
 					State:      utils.StateFocus,
-					IsNotify:   true,
+					IsNotify:   tt.isNotifyInput,
 					PausePoint: nil,
 					EndTime:    time.Now().Add(tt.duration),
 				}
@@ -38,7 +49,15 @@ func TestPause(t *testing.T) {
 				if resultJSON.PausePoint == nil {
 					t.Errorf(
 						"Got nil, want %s",
-						tt.output,
+						tt.remainingDurationOutput,
+					)
+				}
+
+				if resultJSON.IsNotify != tt.isNotifyOutput {
+					t.Errorf(
+						"Got %t, want %t",
+						tt.isNotifyInput,
+						tt.isNotifyOutput,
 					)
 				}
 			},
