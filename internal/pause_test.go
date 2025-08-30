@@ -12,6 +12,16 @@ func TestPause(t *testing.T) {
 	dirPath := t.TempDir()
 	file := utils.TestSetupTempFile(t, dirPath)
 
+	t.Cleanup(func() {
+		err := file.Close()
+		if err != nil {
+			t.Fatalf(
+				"Failed to close file: %v",
+				err,
+			)
+		}
+	})
+
 	remainingDurationCases := []struct {
 		duration                time.Duration
 		remainingDurationOutput string
@@ -64,14 +74,4 @@ func TestPause(t *testing.T) {
 			},
 		)
 	}
-
-	t.Cleanup(func() {
-		err := file.Close()
-		if err != nil {
-			t.Fatalf(
-				"Failed to close file: %v",
-				err,
-			)
-		}
-	})
 }
