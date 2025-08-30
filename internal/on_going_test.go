@@ -155,3 +155,67 @@ func TestOnGoingEndTime(t *testing.T) {
 		}
 	})
 }
+
+func TestOnGoingIsNotify(t *testing.T) {
+	isNotifyCases := []struct {
+		inputUseNotify      bool
+		inputNotifyCmdExist bool
+		output              bool
+	}{
+		{true, true, true},
+		{false, true, false},
+		{true, false, false},
+		{false, false, false},
+	}
+
+	var (
+		dirPath = t.TempDir()
+		file    = utils.TestSetupTempFile(t, dirPath)
+	)
+
+	t.Cleanup(func() {
+		err := file.Close()
+		if err != nil {
+			t.Fatalf(
+				"Failed to close file: %v",
+				err,
+			)
+		}
+	})
+
+	for _, tt := range isNotifyCases {
+		t.Run(
+			fmt.Sprintf(
+				"isUseNotify %t, isNotifyCmdExist %t",
+				tt.inputUseNotify, tt.inputNotifyCmdExist,
+			),
+			func(t *testing.T) {
+				status := utils.Status{
+					State:      utils.StateFocus,
+					IsNotify:   true,
+					PausePoint: nil,
+				}
+
+				utils.TestSetupStatusFile(t, status, file)
+
+				scmd.OnGoing(
+					file.Name(),
+					time.Duration(0*time.Second),
+					utils.StateFocus,
+					tt.inputUseNotify,
+					tt.inputNotifyCmdExist,
+				)
+
+				resultJSON := utils.ReadStatusFile(file.Name())
+
+				if resultJSON.IsNotify != tt.output {
+					t.Errorf(
+						"Got %v, want %v",
+						resultJSON.IsNotify,
+						tt.output,
+					)
+				}
+			},
+		)
+	}
+}
