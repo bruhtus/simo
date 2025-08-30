@@ -142,9 +142,9 @@ func TestOnGoingEndTime(t *testing.T) {
 					endTime := resultJSON.EndTime.Round(time.Second)
 
 					t.Cleanup(func() {
+						// Reset the end time so that it become expired.
 						if !errors.Is(err, os.ErrNotExist) {
 							resultJSON.EndTime = time.Now()
-
 							statusJSON, err := json.Marshal(resultJSON)
 
 							if err != nil {
