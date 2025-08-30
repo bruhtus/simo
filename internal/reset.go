@@ -5,7 +5,6 @@ import (
 	"os"
 )
 
-// TODO: add test case.
 func Reset(statusPath string) error {
 	err := os.Remove(statusPath)
 
