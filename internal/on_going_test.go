@@ -26,7 +26,11 @@ func TestOnGoingEndTime(t *testing.T) {
 	}{
 		{
 			durationCases[0],
-			time.Now().Add(durationCases[0]).Round(time.Second),
+			time.
+				Now().
+				Local().
+				Add(durationCases[0]).
+				Round(time.Second),
 		},
 		{
 			durationCases[1],
