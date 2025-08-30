@@ -46,12 +46,6 @@ func TestSetupStatusFile(
 		)
 	}
 
-	TestResetFile(t, file)
-}
-
-func TestResetFile(t *testing.T, file *os.File) {
-	t.Helper()
-
 	t.Cleanup(func() {
 		err := file.Truncate(0)
 		if err != nil {
