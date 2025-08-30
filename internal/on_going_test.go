@@ -28,21 +28,29 @@ func TestOnGoingEndTime(t *testing.T) {
 			durationCases[0],
 			time.
 				Now().
-				Local().
 				Add(durationCases[0]).
 				Round(time.Second),
 		},
 		{
 			durationCases[1],
-			time.Now().Add(durationCases[1]).Round(time.Second),
+			time.
+				Now().
+				Add(durationCases[1]).
+				Round(time.Second),
 		},
 		{
 			durationCases[2],
-			time.Now().Add(durationCases[2]).Round(time.Second),
+			time.
+				Now().
+				Add(durationCases[2]).
+				Round(time.Second),
 		},
 		{
 			durationCases[3],
-			time.Now().Add(durationCases[3]).Round(time.Second),
+			time.
+				Now().
+				Add(durationCases[3]).
+				Round(time.Second),
 		},
 	}
 
@@ -85,11 +93,14 @@ func TestOnGoingEndTime(t *testing.T) {
 					resultJSON := utils.ReadStatusFile(file.Name())
 					endTime := resultJSON.EndTime.Round(time.Second)
 
-					if endTime != tt.output {
+					comparation := endTime.Compare(tt.output)
+
+					if comparation != 0 {
 						t.Errorf(
-							"Got %v, want %v",
+							"Got %v, want %v. Compare result: %d",
 							endTime,
 							tt.output,
+							comparation,
 						)
 					}
 				},
@@ -147,11 +158,14 @@ func TestOnGoingEndTime(t *testing.T) {
 						}
 					})
 
-					if endTime != tt.output {
+					comparation := endTime.Compare(tt.output)
+
+					if comparation != 0 {
 						t.Errorf(
-							"Got %v, want %v",
+							"Got %v, want %v. Compare result: %d",
 							endTime,
 							tt.output,
+							comparation,
 						)
 					}
 				},
