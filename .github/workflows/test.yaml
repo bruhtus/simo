@@ -1,0 +1,21 @@
+name: test
+on:
+  pull_request:
+    types: [opened, reopened]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+
+      - name: Setup go
+        uses: actions/setup-go@v5
+
+      - name: Install dependencies
+        run: go get .
+
+      - name: Run test cases
+        run: go test ./... -v
