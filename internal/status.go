@@ -7,7 +7,6 @@ import (
 	"github.com/bruhtus/simo/utils"
 )
 
-// TODO: add test case.
 func Status(
 	statusPath string,
 	notifyCmd string,
