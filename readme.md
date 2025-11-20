@@ -5,7 +5,7 @@ such as `i3status`.
 
 ## Installation
 
-To install the this CLI, we can do:
+To install this CLI, we can do:
 ```sh
 go install github.com/bruhtus/simo@latest
 ```
