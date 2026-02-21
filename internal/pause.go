@@ -8,7 +8,17 @@ import (
 	"github.com/bruhtus/simo/utils"
 )
 
-func Pause(statusPath string) {
+func Pause(
+	now func() time.Time,
+	statusPath string,
+) {
+	// Substitute this in test.
+	// Reference:
+	// https://stackoverflow.com/a/25791617
+	if now == nil {
+		now = time.Now
+	}
+
 	var (
 		status    = utils.ReadStatusFile(statusPath)
 		isExpired = utils.DetermineIsExpired(status.EndTime)
@@ -19,21 +29,9 @@ func Pause(statusPath string) {
 		newPausePoint = fmt.Sprintf("%dm%ds", minutes, seconds)
 	)
 
-	if isExpired {
-		if status.PausePoint != nil {
-			status.PausePoint = nil
-
-			statusJSON, err := json.Marshal(status)
-			utils.CheckError(err)
-
-			utils.WriteStatusFile(statusPath, statusJSON)
-		}
-		return
-	}
-
 	if status.PausePoint != nil {
 		remainingDuration := utils.ParseDuration(*status.PausePoint)
-		newEndTime := time.Now().Add(remainingDuration)
+		newEndTime := now().Add(remainingDuration)
 
 		status.PausePoint = nil
 		status.EndTime = newEndTime
@@ -42,6 +40,10 @@ func Pause(statusPath string) {
 		utils.CheckError(err)
 
 		utils.WriteStatusFile(statusPath, statusJSON)
+		return
+	}
+
+	if isExpired {
 		return
 	}
 

@@ -93,7 +93,7 @@ func main() {
 		utils.CheckError(err)
 
 	case "pause":
-		scmd.Pause(statusPath)
+		scmd.Pause(nil, statusPath)
 
 	default:
 		utils.HelpUsage()
