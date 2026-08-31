@@ -38,29 +38,16 @@ func TestSetupStatusFile(
 		)
 	}
 
-	_, err = file.Write(statusJSON)
+	// Looks like there's a difference between using (*os.File).Write() and
+	// (*os.File).Truncate(0) with os.WriteFile().
+	// If we use (*os.File).Write() and (*os.File).Truncate(), there's a
+	// chance that the file content become stale (?), which can cause problem
+	// when we require the test file to use new data.
+	err = os.WriteFile(file.Name(), statusJSON, 0644)
 	if err != nil {
 		t.Fatalf(
 			"Failed to write data into temporary file: %v",
 			err,
 		)
 	}
-
-	t.Cleanup(func() {
-		err := file.Truncate(0)
-		if err != nil {
-			t.Fatalf(
-				"Failed to truncate file: %v",
-				err,
-			)
-		}
-
-		_, err = file.Seek(0, 0) // Seek the beginning of the file.
-		if err != nil {
-			t.Fatalf(
-				"Failed to seek the begining of file: %v",
-				err,
-			)
-		}
-	})
 }
