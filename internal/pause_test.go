@@ -26,31 +26,30 @@ func TestPause(t *testing.T) {
 		duration                time.Duration
 		remainingDurationOutput string
 		isNotifyInput           bool
-		isNotifyOutput          bool
 	}{
 		{
 			time.Duration(-1 * time.Second), "",
-			false, false,
+			false,
 		},
 		{
 			time.Duration(0 * time.Second), "",
-			false, false,
+			false,
 		},
 		{
 			time.Duration(1 * time.Second), "0m1s",
-			true, true,
+			true,
 		},
 		{
 			time.Duration(1 * time.Minute), "1m0s",
-			false, false,
+			false,
 		},
 		{
 			time.Duration(60 * time.Minute), "60m0s",
-			true, true,
+			true,
 		},
 		{
 			time.Duration(90 * time.Minute), "90m0s",
-			true, true,
+			true,
 		},
 	}
 
@@ -84,11 +83,11 @@ func TestPause(t *testing.T) {
 					)
 				}
 
-				if resultJSON.IsNotify != tt.isNotifyOutput {
+				if resultJSON.IsNotify != tt.isNotifyInput {
 					t.Errorf(
 						"Got %t, want %t",
+						resultJSON.IsNotify,
 						tt.isNotifyInput,
-						tt.isNotifyOutput,
 					)
 				}
 			},

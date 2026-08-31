@@ -37,6 +37,13 @@ func DetermineStateIndicator(state StatusState) string {
 	return indicator
 }
 
+// To prevent race condition when another process (e.g simo-gui) trying to
+// access simo file. Due to wrong timing, when we write the data to simo file
+// directly, another process might be in the middle of reading the file and
+// might throw error "unexpected end of JSON input" when unmarshal the
+// incomplete json file.
+// Reference:
+// https://dev.to/catatsuy/safely-updating-existing-files-in-go-1hlc
 func WriteStatusFile(path string, data []byte) {
 	dir := filepath.Dir(path)
 
@@ -45,7 +52,19 @@ func WriteStatusFile(path string, data []byte) {
 		CheckError(err)
 	}
 
-	err := os.WriteFile(path, data, 0644)
+	tmp, err := os.CreateTemp(dir, "simo-*.json")
+	CheckError(err)
+
+	// Clean up if there's an error.
+	defer os.Remove(tmp.Name())
+
+	_, err = tmp.Write(data)
+	CheckError(err)
+
+	err = tmp.Close()
+	CheckError(err)
+
+	err = os.Rename(tmp.Name(), path)
 	CheckError(err)
 }
 
